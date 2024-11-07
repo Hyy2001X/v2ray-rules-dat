@@ -164,7 +164,7 @@ jobs:
           curl -sSL $WIN_EXTRA | grep "0.0.0.0" | awk '{print $2}' > ./community/data/win-extra
           curl -sSL $WIN_EXTRA | grep "0.0.0.0" | awk '{print $2}' > win-extra.txt
           curl -sSL https://raw.githubusercontent.com/Rongronggg9/chinalist/refs/heads/main/chinalist_plain.txt | egrep -v '#|google|apple|microsoft|msn|bing|steam|cloudflare|epicgames|ubisoft|github' | sort | uniq > ./community/data/chinalist_plain
-          curl -sSL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/ChinaMax/ChinaMax_Domain.txt | sed 's/^.//' | egrep -v '#|google|apple|microsoft|msn|bing|steam|cloudflare|epicgames|ubisoft|github' | sort | uniq > ./community/data/chinamax
+          curl -sSL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/ChinaMax/ChinaMax_Domain.txt | sed 's/^.//' | egrep -v 'AUTHOR|#|google|apple|microsoft|msn|bing|steam|cloudflare|epicgames|ubisoft|github' | sort | uniq > ./community/data/chinamax
 
       - name: Build geosite.dat file
         run: |
