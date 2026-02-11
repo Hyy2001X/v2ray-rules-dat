@@ -3,19 +3,15 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "0 22 */3 * *"
-  push:
-    branches:
-      - master
-    paths-ignore:
-      - "**/README.md"
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Set variables
         run: |
-          echo "RELEASE_NAME=Released on $(date +%Y%m%d%H%M)" >> $GITHUB_ENV
-          echo "TAG_NAME=$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
+          echo "RELEASE_NAME=Latest" >> $GITHUB_ENV
+          echo "TAG_NAME=latest" >> $GITHUB_ENV
           echo "CHINA_DOMAINS_URL=https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/accelerated-domains.china.conf" >> $GITHUB_ENV
           echo "GOOGLE_DOMAINS_URL=https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/google.china.conf" >> $GITHUB_ENV
           echo "APPLE_DOMAINS_URL=https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/apple.china.conf" >> $GITHUB_ENV
@@ -186,6 +182,19 @@ jobs:
           sha256sum geosite.dat > geosite.dat.sha256sum
           sha256sum rules.zip > rules.zip.sha256sum
 
+      - name: Cleanup old releases
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          gh release list --limit 200 --json tagName -q '.[].tagName' \
+            | grep -v '^latest$' \
+            | while read -r t; do
+                echo "Deleting release: $t"
+                gh release delete "$t" -y || true
+                git push origin --delete "$t" || true
+              done
+
       - name: Release and upload assets
         uses: svenstaro/upload-release-action@v2
         with:
@@ -194,6 +203,7 @@ jobs:
           tag: ${{ env.TAG_NAME }}
           file_glob: true
           file: ./publish/*
+          overwrite: true
 
       - name: Git push assets to "release" branch
         run: |
