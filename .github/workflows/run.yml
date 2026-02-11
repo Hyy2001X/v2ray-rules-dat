@@ -31,30 +31,30 @@ jobs:
         shell: bash
 
       - name: Checkout the "hidden" branch of this repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: hidden
 
       - name: Checkout Loyalsoldier/domain-list-custom
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: Loyalsoldier/domain-list-custom
           path: custom
 
       - name: Checkout v2fly/domain-list-community
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: v2fly/domain-list-community
           path: community
 
       - name: Checkout cokebar/gfwlist2dnsmasq
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: cokebar/gfwlist2dnsmasq
           path: gfwlist2dnsmasq
 
       - name: Setup Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version-file: ./custom/go.mod
           cache-dependency-path: ./custom/go.sum
@@ -164,9 +164,12 @@ jobs:
           curl -sSL $WIN_EXTRA | grep "0.0.0.0" | awk '{print $2}' > ./community/data/win-extra
           curl -sSL $WIN_EXTRA | grep "0.0.0.0" | awk '{print $2}' > win-extra.txt
           wget https://raw.githubusercontent.com/Rongronggg9/chinalist/refs/heads/main/chinalist_plain.txt
-          egrep -v 'gvt|youtube|#|google|apple|microsoft|msn|bing|steam|cloudflare|epicgames|ubisoft|github' chinalist_plain.txt | sort | uniq | sed 's/^/domain:/' > ./community/data/chinalist_plain
+          egrep -v 'ggpht|speedtest|gstatic|gvt|youtube|#|google|apple|microsoft|msn|bing|steam|cloudflare|epicgames|ubisoft|github' chinalist_plain.txt | sort | uniq | sed 's/^/domain:/' > ./community/data/chinalist_plain
           wget https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/ChinaMax/ChinaMax_Domain.txt
-          egrep -v 'gvt|youtube|#|google|apple|microsoft|msn|bing|steam|cloudflare|epicgames|ubisoft|github' ChinaMax_Domain.txt | sed 's/^.//' | sort | uniq | sed 's/^/domain:/' > ./community/data/chinamax
+          egrep -v 'ggpht|speedtest|gstatic|gvt|youtube|#|google|apple|microsoft|msn|bing|steam|cloudflare|epicgames|ubisoft|github' ChinaMax_Domain.txt | sed 's/^.//' | sort | uniq | sed 's/^/domain:/' > ./community/data/chinamax
+          wget https://static-file-global.353355.xyz/rules/cn-additional-list.txt
+          egrep -v 'ggpht|speedtest|gstatic|gvt|youtube|#|google|apple|microsoft|msn|bing|steam|cloudflare|epicgames|ubisoft|github' cn-additional-list.txt | sort | uniq | sed 's/^/domain:/' > ./community/data/cn-additional
+          sort -u ./community/data/chinalist_plain ./community/data/chinamax ./community/data/cn-additional 2>/dev/null > ./community/data/customized_china_all
 
       - name: Build geosite.dat file
         run: |
