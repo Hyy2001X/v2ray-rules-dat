@@ -1,8 +1,8 @@
-name: Build V2Ray rules dat files
+name: Build Xray rules dat files
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 22 * * *"
+    - cron: "0 22 */3 * *"
   push:
     branches:
       - master
