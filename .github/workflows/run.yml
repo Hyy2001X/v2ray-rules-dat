@@ -144,8 +144,8 @@ jobs:
 
       - name: Create `china-list`、`google-cn`、`apple-cn`、`gfw`、`greatfire` lists
         run: |
-          curl -sSL $CHINA_DOMAINS_URL | perl -ne '/^server=\/([^\/]+)\// && print "$1\n"' > ./community/data/china-list
-          curl -sSL $CHINA_DOMAINS_URL | perl -ne '/^server=\/([^\/]+)\// && print "$1\n"' > china-list.txt
+          curl -sSL $CHINA_DOMAINS_URL | perl -ne '/^server=\/([^\/]+)\// && print "$1\n"' | grep -v '^cn$' > ./community/data/china-list
+          curl -sSL $CHINA_DOMAINS_URL | perl -ne '/^server=\/([^\/]+)\// && print "$1\n"' | grep -v '^cn$' > china-list.txt
           curl -sSL $GOOGLE_DOMAINS_URL | perl -ne '/^server=\/([^\/]+)\// && print "full:$1\n"' > ./community/data/google-cn
           curl -sSL $GOOGLE_DOMAINS_URL | perl -ne '/^server=\/([^\/]+)\// && print "full:$1\n"' > google-cn.txt
           curl -sSL $APPLE_DOMAINS_URL | perl -ne '/^server=\/([^\/]+)\// && print "full:$1\n"' > ./community/data/apple-cn
@@ -166,6 +166,7 @@ jobs:
           wget https://static-file-global.353355.xyz/rules/cn-additional-list.txt
           egrep -v 'ggpht|speedtest|gstatic|gvt|youtube|#|google|apple|microsoft|msn|bing|steam|cloudflare|epicgames|ubisoft|github' cn-additional-list.txt | grep -v '^cn$' 2> /dev/null | sort | uniq | sed 's/^/domain:/' > ./community/data/cn-additional
           sort -u ./community/data/chinalist_plain ./community/data/chinamax ./community/data/cn-additional 2>/dev/null > ./community/data/customized_china_all
+          grep -v '^cn$' ./community/data/tld-cn > ./tld-cn.tmp && mv -f ./tld-cn.tmp ./community/data/tld-cn
 
       - name: Build geosite.dat file
         run: |
