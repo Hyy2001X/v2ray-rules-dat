@@ -165,7 +165,7 @@ jobs:
           egrep -v 'ggpht|speedtest|gstatic|gvt|youtube|#|google|apple|microsoft|msn|bing|steam|cloudflare|epicgames|ubisoft|github' ChinaMax_Domain.txt | grep -v '^\.cn$' 2> /dev/null | sed 's/^.//' | sort | uniq | sed 's/^/domain:/' > ./community/data/chinamax
           wget https://static-file-global.353355.xyz/rules/cn-additional-list.txt
           egrep -v 'ggpht|speedtest|gstatic|gvt|youtube|#|google|apple|microsoft|msn|bing|steam|cloudflare|epicgames|ubisoft|github' cn-additional-list.txt | grep -v '^cn$' 2> /dev/null | sort | uniq | sed 's/^/domain:/' > ./community/data/cn-additional
-          sort -u ./community/data/chinalist_plain ./community/data/chinamax ./community/data/cn-additional 2>/dev/null > ./community/data/customized_china_all
+          sort -u ./community/data/chinalist_plain ./community/data/chinamax ./community/data/cn-additional 2>/dev/null > ./community/data/customized-china-all
           grep -v '^cn$' ./community/data/tld-cn > ./tld-cn.tmp && mv -f ./tld-cn.tmp ./community/data/tld-cn
 
       - name: Build geosite.dat file
