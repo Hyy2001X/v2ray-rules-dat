@@ -126,7 +126,7 @@ jobs:
 
       - name: Write lists to data directory
         run: |
-          cat temp-cn.txt | sort --ignore-case -u | perl -ne '/^((?=^.{1,255})[a-zA-Z0-9][-_a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-_a-zA-Z0-9]{0,62})*)/ && print "$1\n"' | grep -v '^cn$' > ./community/data/cn
+          cat temp-cn.txt | sort --ignore-case -u | perl -ne '/^((?=^.{1,255})[a-zA-Z0-9][-_a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-_a-zA-Z0-9]{0,62})*)/ && print "$1\n"' | grep -v '^cn$' | egrep -v 'windows|ggpht|speedtest|gstatic|gvt|youtube|#|google|apple|microsoft|msn|bing|steam|cloudflare|epicgames|ubi|github' 2>/dev/null > ./community/data/cn
           cat temp-cn.txt | sort --ignore-case -u | perl -ne 'print if not /^((?=^.{3,255})[a-zA-Z0-9][-_a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-_a-zA-Z0-9]{0,62})+)/' > direct-tld-list.txt
           cat temp-geolocation-\!cn.txt | sort --ignore-case -u | perl -ne '/^((?=^.{1,255})[a-zA-Z0-9][-_a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-_a-zA-Z0-9]{0,62})*)/ && print "$1\n"' > ./community/data/geolocation-\!cn
           cat temp-geolocation-\!cn.txt | sort --ignore-case -u | perl -ne 'print if not /^((?=^.{3,255})[a-zA-Z0-9][-_a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-_a-zA-Z0-9]{0,62})+)/' > proxy-tld-list.txt
@@ -145,7 +145,6 @@ jobs:
       - name: Create `china-list`、`google-cn`、`apple-cn`、`gfw`、`greatfire` lists
         run: |
           curl -sSL $CHINA_DOMAINS_URL | perl -ne '/^server=\/([^\/]+)\// && print "$1\n"' | grep -v '^cn$' | egrep -v 'windows|ggpht|speedtest|gstatic|gvt|youtube|#|google|apple|microsoft|msn|bing|steam|cloudflare|epicgames|ubi|github' 2>/dev/null > ./community/data/china-list
-          curl -sSL $CHINA_DOMAINS_URL | perl -ne '/^server=\/([^\/]+)\// && print "$1\n"' | grep -v '^cn$' | egrep -v 'windows|ggpht|speedtest|gstatic|gvt|youtube|#|google|apple|microsoft|msn|bing|steam|cloudflare|epicgames|ubi|github' 2>/dev/null > china-list.txt
           curl -sSL $GOOGLE_DOMAINS_URL | perl -ne '/^server=\/([^\/]+)\// && print "full:$1\n"' > ./community/data/google-cn
           curl -sSL $GOOGLE_DOMAINS_URL | perl -ne '/^server=\/([^\/]+)\// && print "full:$1\n"' > google-cn.txt
           curl -sSL $APPLE_DOMAINS_URL | perl -ne '/^server=\/([^\/]+)\// && print "full:$1\n"' > ./community/data/apple-cn
